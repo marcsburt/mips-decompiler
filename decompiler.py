@@ -36,14 +36,20 @@ for index, inst in enumerate(instructs):
 	else:
 		opcode_map = (inst & opcode_r) >> 26
 		offset_map = (inst & offset_r)
+		twos_comp_offset = Bits(bin(offset_map))
 		src_map = (inst & src_dest_r) >> 16
 		src_dest_map = (inst & source_r) >> 21
 		opcode_name = opcode_dict.get(opcode_map)
-		if opcode_map == 35 or opcode_map == 43:
-			print opcode_name, "$",src_dest_map, offset_map,"($", src_map,")"
+		if opcode_map == 0b100011 or opcode_map == 0b101011:
+			if offset_map < 0xff:
+				print opcode_name, '$',src_map, offset_map,'($', src_dest_map,')'
+			else: 
+				print opcode_name, '$',src_map, twos_comp_offset.int,'($', src_dest_map,')'
 		else:
-			print opcode_name, src_dest_map, src_map, offset_map
-	# print " -------------------------------------------- "
+			if offset_map < 0xff:
+				print opcode_name, '$',src_dest_map, '$', src_map, offset_map + 4
+			else:
+				print opcode_name, '$',src_dest_map, '$', src_map,twos_comp_offset.int + 4
 
 
 
