@@ -34,11 +34,11 @@ for index, inst in enumerate(instructs):
 		fir_source_map = (inst & fir_source_r) >> 21
 		print function_name, " $",dest_map," $", fir_source_map," $", sec_source_map 
 	else:
-		opcode_map = (inst & opcode_r) >> 26
 		offset_map = (inst & offset_r)
 		twos_comp_offset = Bits(bin(offset_map))
 		src_map = (inst & src_dest_r) >> 16
 		src_dest_map = (inst & source_r) >> 21
+		opcode_map = (inst & opcode_r) >> 26
 		opcode_name = opcode_dict.get(opcode_map)
 		if opcode_map == 0b100011 or opcode_map == 0b101011:
 			if offset_map < 0xff:
